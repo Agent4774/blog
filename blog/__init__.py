@@ -13,4 +13,5 @@ app.config['MONGO_URI'] = os.environ.get('MONGO_URI')
 mongo = PyMongo(app)
 
 
-import blog.routes
+import blog.users.routes
+import blog.posts.routes

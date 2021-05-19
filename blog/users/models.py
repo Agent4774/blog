@@ -1,7 +1,6 @@
-import json
 import uuid
 from blog import mongo
-from flask import jsonify, session
+from flask import jsonify
 from werkzeug.security import generate_password_hash
 
 
