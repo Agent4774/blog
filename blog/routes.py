@@ -53,7 +53,7 @@ def create_post(current_user):
 		post = mongo.db.post.find_one({'_id': post.inserted_id})
 		mongo.db.user.update_one(
 			{'public_id': current_user['public_id']},
-			{'$push': {'posts': {'public_id': post['public_id']}}}
+			{'$push': {'posts': post['public_id']}}
 		)
 		return jsonify({'detail': 'Post has been created!'})
 
