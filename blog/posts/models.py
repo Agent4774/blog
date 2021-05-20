@@ -1,3 +1,4 @@
+from datetime import datetime
 import secrets
 from flask import jsonify
 from blog import mongo
@@ -8,9 +9,9 @@ class Post:
 				self.data = data
 
 		def validate(self, data):
-				title = data.get('title', None)
-				content = data.get('content', None)
-				if title == None or content == None:
+				title = data.get('title')
+				content = data.get('content')
+				if title == '' or content == '':
 						return {'Alert!': 'Please provide title and content'}
 				if len(title) > 100:
 						return {'Alert!': 'Title must be of no more than 100 symbols!'}
@@ -20,17 +21,17 @@ class Post:
 		def create(self):
 				validated = self.validate(self.data)
 				if validated == True:
-					post = mongo.db.post.insert_one({
-						'public_id': secrets.token_hex(8),
-						'title': self.data['title'],
-						'content': self.data['content'],
-						'created': datetime.datetime.now(),
-						'author': current_user['username']
-					})
-					post = mongo.db.post.find_one({'_id': post.inserted_id})
-					mongo.db.user.update_one(
-						{'public_id': current_user['public_id']},
-						{'$push': {'posts': post['public_id']}}
-					)
-					return jsonify({'detail': 'Post has been created!'}), 201
+						post = {
+							'title': self.data['title'],
+							'content': self.data['content'],
+							'created': datetime.utcnow(),
+							'author': self.data['username']
+						}
+						mongo.db.post.insert_one(post)
+						mongo.db.user.update_one(
+							{'username': self.data['username']},
+							{'$push': {'posts': post['_id']}}
+						)
+						del post['_id']
+						return jsonify(post), 201
 				return jsonify(validated), 400
