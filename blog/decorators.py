@@ -10,7 +10,7 @@ def token_required(f):
 		def wrap(*args, **kwargs):
 				token = request.headers.get('x-access-token', None)
 				if not token:
-						return jsonify({'error': 'Please, provide a token!'}), 400
+						return jsonify({'error': 'Please, provide a token!'}), 403
 				try:
 						data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
 						current_user = mongo.db.user.find_one({
