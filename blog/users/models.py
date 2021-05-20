@@ -36,7 +36,7 @@ class User:
 						if password != password2:
 								return {'detail': 'Passwords must match!'}
 				else:
-						return {'detail': 'password and password2 required'}
+						return {'detail': 'password and password2 required!'}
 				return True
 
 		def create(self):
@@ -51,7 +51,7 @@ class User:
 							'posts': []
 						}						
 						mongo.db.user.insert_one(user)
-						# Removin unnecessary data
+						# Removing unnecessary data
 						del user['_id']
 						del user['password']
 						return jsonify(user), 201
