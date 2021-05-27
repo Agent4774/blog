@@ -1,5 +1,4 @@
 import datetime
-import json
 import secrets
 from blog import app, mongo
 from blog.decorators import token_required
@@ -11,7 +10,7 @@ from flask import request, jsonify
 @app.route('/post/create', methods=['POST'])
 @token_required
 def create_post(current_user):
-		data = json.loads(request.get_json())
+		data = request.json
 		data['username'] = current_user['username']
 		post = Post(data)
 		return post.create()
@@ -28,7 +27,7 @@ def retrieve_post(_, _id):
 @app.route('/post/update/<_id>', methods=['PUT'])
 @token_required
 def update_post(_, _id):
-		data = json.loads(request.get_json())
+		data = request.json
 		mongo.db.post.update_one(
 			{'_id': ObjectId(_id)},
 			{'$set': data}

@@ -1,5 +1,4 @@
 import datetime
-import json
 import jwt
 from blog import app, mongo
 from blog.decorators import token_required
@@ -10,13 +9,13 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 @app.route('/user/register', methods=['POST'])
 def user_register():
-		data = json.loads(request.get_json())
+		data = request.json
 		user = User(data)
 		return user.create()
 
 @app.route('/user/login', methods=['POST'])
 def user_login():
-		data = json.loads(request.get_json())
+		data = request.json
 		username = data.get('username')
 		password = data.get('password')
 		if not username or not password:
@@ -40,7 +39,7 @@ def user_login():
 @app.route('/user/change-password', methods=['POST'])
 @token_required
 def change_password(current_user):
-		data = json.loads(request.get_json())
+		data = request.json
 		old_password = data.get('old_password')
 		new_password = data.get('new_password')
 		if not old_password or not new_password:
