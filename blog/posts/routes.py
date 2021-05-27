@@ -3,7 +3,7 @@ import secrets
 from blog import app, mongo
 from blog.decorators import token_required
 from blog.posts.models import Post
-from bson.objectid import ObjectId
+from flask_pymongo import ObjectId
 from flask import request, jsonify
 
 
